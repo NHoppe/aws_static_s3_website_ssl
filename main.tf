@@ -12,13 +12,13 @@ resource "aws_s3_bucket" "website" {
     error_document = "error.html"
   }
 
-//  cors_rule {
-//    allowed_headers = ["*"]
-//    allowed_methods = ["PUT", "POST"]
-//    allowed_origins = ["https://${var.website_domain}"]
-//    expose_headers  = ["ETag"]
-//    max_age_seconds = 3000
-//  }
+  //  cors_rule {
+  //    allowed_headers = ["*"]
+  //    allowed_methods = ["PUT", "POST"]
+  //    allowed_origins = ["https://${var.website_domain}"]
+  //    expose_headers  = ["ETag"]
+  //    max_age_seconds = 3000
+  //  }
 
   tags = {
     Name = "Static Corporate Website"
@@ -47,9 +47,9 @@ resource "aws_route53_zone" "website_zone" {
 
 resource "aws_route53_record" "website_cname" {
   zone_id = aws_route53_zone.website_zone.zone_id
-  name = var.website_domain
-  type = "NS"
-  ttl = "30"
+  name    = var.website_domain
+  type    = "NS"
+  ttl     = "30"
   records = [
     aws_route53_zone.website_zone.name_servers,
     aws_route53_zone.website_zone.name_servers,
@@ -62,9 +62,9 @@ resource "aws_route53_record" "website_cname" {
 resource "aws_route53_record" "website_certificate_validation" {
   for_each = {
     for dvo in aws_acm_certificate.website.domain_validation_options : dvo.domain_name => {
-      name    = dvo.resource_record_name
-      record  = dvo.resource_record_value
-      type    = dvo.resource_record_type
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
     }
   }
 
